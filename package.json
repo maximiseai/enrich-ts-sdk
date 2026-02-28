@@ -1,7 +1,7 @@
 {
-  "name": "enrich-ts-sdk",
+  "name": "@enrich.so/sdk",
   "version": "0.1.0",
-  "description": "TypeScript SDK for the Enrich API — email finder, phone finder, lead finder, email validation, and more.",
+  "description": "TypeScript SDK for the Enrich API - email finder, phone finder, lead finder, email validation, and more.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +29,8 @@
     "build": "tsc",
     "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\"",
     "prepack": "npm run build",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepare": "husky"
   },
   "keywords": [
     "enrich",
@@ -55,7 +56,13 @@
     "url": "https://github.com/maximiseai/enrich-ts-sdk/issues"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "^25.3.2",
+    "husky": "^9.1.7",
+    "semantic-release": "^25.0.3",
     "typescript": "~5.7.0"
   },
   "engines": {
