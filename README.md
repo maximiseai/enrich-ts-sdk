@@ -15,7 +15,7 @@ import { EnrichApiClient } from "enrich-ts-sdk";
 
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
 });
 
 const result = await client.emailFinder.findEmail({
@@ -34,7 +34,7 @@ All API requests require an API key passed via the `x-api-key` header. The SDK h
 ```typescript
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
 });
 ```
 
@@ -43,7 +43,7 @@ You can also provide the API key lazily via a supplier function:
 ```typescript
 const client = new EnrichApiClient({
   apiKey: () => process.env.ENRICH_API_KEY!,
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
 });
 ```
 
@@ -105,7 +105,7 @@ const email = await client.emailFinder.findEmail({
   domain: "figma.com",
 });
 
-// Batch lookup (up to 500,000 leads)
+// Batch lookup 
 const batch = await client.emailFinder.batchFindEmails({
   leads: [
     { firstName: "Emily", lastName: "Zhang", domain: "figma.com" },
@@ -160,13 +160,13 @@ Find phone numbers for professionals.
 
 ```typescript
 // Single lookup
-const phone = await client.phoneFinder.findPhone({
-  linkedinUrl: "https://linkedin.com/in/emilyzhang",
+const phone = await client.phoneFinder.phoneLookup({
+  linkedin: "https://linkedin.com/in/emilyzhang",
 });
 
 // Batch lookup
-const batch = await client.phoneFinder.batchFindPhones({
-  leads: [{ linkedinUrl: "https://linkedin.com/in/emilyzhang" }],
+const batch = await client.phoneFinder.createPhoneBulkJob({
+  linkedins: ["https://linkedin.com/in/emilyzhang"],
 });
 
 // Check status & get results
@@ -185,12 +185,12 @@ Look up a person's profile using their email address.
 
 ```typescript
 // Single lookup
-const profile = await client.reverseEmailLookup.lookup({
+const profile = await client.reverseEmailLookup.reverseLookup({
   email: "emily@figma.com",
 });
 
 // Bulk lookup
-const bulk = await client.reverseEmailLookup.bulkLookup({
+const bulk = await client.reverseEmailLookup.bulkReverseLookup({
   emails: ["emily@figma.com", "david@vercel.com"],
 });
 
@@ -213,22 +213,23 @@ Search and discover leads based on filters.
 const leads = await client.leadFinder.searchLeads({
   filters: { jobTitle: "CTO", companySize: "51-200" },
   page: 1,
-  limit: 25,
+  pageSize: 25,
 });
 
 // Get lead count
-const count = await client.leadFinder.getLeadCount({
+const count = await client.leadFinder.countLeads({
   filters: { jobTitle: "CTO", companySize: "51-200" },
 });
 
 // Reveal lead contact details
 const revealed = await client.leadFinder.revealLeads({
-  leadIds: ["lead_123", "lead_456"],
+  leads: [{ id: "lead_123" }, { id: "lead_456" }],
 });
 
 // Enrich leads
 const enriched = await client.leadFinder.enrichLeads({
-  leadIds: ["lead_123"],
+  leads: [{ id: "lead_123" }],
+  fields: ["email"],
 });
 
 // Save a search
@@ -241,16 +242,16 @@ const saved = await client.leadFinder.createSavedSearch({
 const searches = await client.leadFinder.listSavedSearches();
 
 // Delete a saved search
-await client.leadFinder.deleteSavedSearch({ searchId: "search_123" });
+await client.leadFinder.deleteSavedSearch({ id: "search_123" });
 
 // Suggest company names
 const suggestions = await client.leadFinder.suggestCompanyNames({
-  query: "Goo",
+  q: "Goo",
 });
 
 // Unlock names
 const unlocked = await client.leadFinder.unlockNames({
-  leadIds: ["lead_123"],
+  leads: [{ id: "lead_123" }],
 });
 
 // Export leads
@@ -268,15 +269,13 @@ Find employees at specific companies.
 
 ```typescript
 // Find employees
-const employees = await client.peopleSearch.findEmployees({
-  domain: "figma.com",
-  limit: 10,
+const employees = await client.peopleSearch.employeeFinder({
+  company_linkedin_url: "https://linkedin.com/company/figma",
 });
 
 // Waterfall ICP search
 const icpResults = await client.peopleSearch.waterfallIcpSearch({
-  domain: "figma.com",
-  jobTitles: ["CTO", "VP Engineering"],
+  company_linkedin_url: "https://linkedin.com/company/figma",
 });
 ```
 
@@ -286,18 +285,19 @@ Get followers of a company.
 
 ```typescript
 // Start a company follower job
-const job = await client.companyFollowers.startCompanyFollowerJob({
+const job = await client.companyFollowers.startCompanyFollowerScrape({
   companyUrl: "https://linkedin.com/company/figma",
+  max_limit: 1000,
 });
 
 // Check progress
 const progress = await client.companyFollowers.getCompanyFollowerProgress({
-  jobId: job.data.id,
+  batchId: job.data.id,
 });
 
 // Get results
 const followers = await client.companyFollowers.getCompanyFollowerResults({
-  jobId: job.data.id,
+  batchId: job.data.id,
   page: 1,
   limit: 50,
 });
@@ -309,7 +309,7 @@ const estimate = await client.companyFollowers.startCountEstimate({
 
 // Check count estimate status
 const estimateStatus = await client.companyFollowers.getCountEstimateStatus({
-  jobId: estimate.data.id,
+  batchId: estimate.data.id,
 });
 
 // Check limits
@@ -317,7 +317,7 @@ const limit = await client.companyFollowers.checkCompanyFollowerLimit();
 
 // Export as CSV
 const csv = await client.companyFollowers.exportCompanyFollowerCsv({
-  jobId: job.data.id,
+  batchId: job.data.id,
 });
 ```
 
@@ -328,24 +328,23 @@ Manage team members and invitations.
 ```typescript
 // List team members
 const members = await client.teams.listTeamMembers({
-  page: 1,
-  limit: 20,
+  teamId: "team_123",
 });
 
 // Invite a member
-const invitation = await client.teams.invite({
+const invitation = await client.teams.inviteTeamMember({
+  teamId: "team_123",
   email: "newmember@company.com",
   role: "member",
 });
 
 // List invitations
 const invitations = await client.teams.listTeamInvitations({
-  page: 1,
-  limit: 20,
+  teamId: "team_123",
 });
 
 // Cancel invitation
-await client.teams.cancelInvitation({ invitationId: "inv_123" });
+await client.teams.cancelInvitation({ teamId: "team_123", invitationId: "inv_123" });
 ```
 
 ### Wallets
@@ -354,7 +353,7 @@ Check credit balance and transaction history.
 
 ```typescript
 // Get wallet balance
-const balance = await client.wallets.getBalance();
+const balance = await client.wallets.getWalletBalance();
 
 // Get transaction history
 const transactions = await client.wallets.getWalletTransactions({
@@ -370,7 +369,7 @@ const transactions = await client.wallets.getWalletTransactions({
 ```typescript
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
   timeoutInSeconds: 30, // Default: 60
 });
 
@@ -388,7 +387,7 @@ Requests are retried up to 2 times by default on failure:
 ```typescript
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
   maxRetries: 5, // Default: 2
 });
 
@@ -418,7 +417,7 @@ controller.abort();
 ```typescript
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
   logging: {
     level: "debug",
     silent: false,
@@ -433,7 +432,7 @@ import fetch from "node-fetch";
 
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
-  environment: "https://api.enrich.so/v1",
+  environment: "https://api.enrich.so/v3",
   fetch: fetch as unknown as typeof globalThis.fetch,
 });
 ```

@@ -1,17 +1,15 @@
 /**
  * Basic usage examples for the Enrich API TypeScript SDK.
- *
  * Run with: npx tsx examples/basic-usage.ts
  */
 
 import { EnrichApiClient, EnrichApi, EnrichApiError, EnrichApiTimeoutError } from "../index.js";
 
 const client = new EnrichApiClient({
-  apiKey: process.env.ENRICH_API_KEY!,
-  environment: "https://api.enrich.so/v1",
+  apiKey: "YOUR_API_KEY",
+  environment: "https://api.enrich.so/v3",
 });
 
-// ── Email Finder ────────────────────────────────────────────────────────
 
 async function findEmail() {
   const result = await client.emailFinder.findEmail({
@@ -22,7 +20,6 @@ async function findEmail() {
   console.log("Email found:", result);
 }
 
-// ── Email Validation ────────────────────────────────────────────────────
 
 async function validateEmail() {
   const result = await client.emailValidation.validateEmail({
@@ -31,42 +28,36 @@ async function validateEmail() {
   console.log("Validation result:", result);
 }
 
-// ── Phone Finder ────────────────────────────────────────────────────────
 
 async function findPhone() {
-  const result = await client.phoneFinder.findPhone({
-    linkedinUrl: "https://linkedin.com/in/emilyzhang",
+  const result = await client.phoneFinder.phoneLookup({
+    linkedin: "https://linkedin.com/in/emilyzhang",
   });
   console.log("Phone found:", result);
 }
 
-// ── Reverse Email Lookup ────────────────────────────────────────────────
 
 async function reverseLookup() {
-  const result = await client.reverseEmailLookup.lookup({
+  const result = await client.reverseEmailLookup.reverseLookup({
     email: "emily@figma.com",
   });
   console.log("Reverse lookup:", result);
 }
 
-// ── People Search ───────────────────────────────────────────────────────
 
 async function findEmployees() {
-  const result = await client.peopleSearch.findEmployees({
-    domain: "figma.com",
-    limit: 5,
+  const result = await client.peopleSearch.employeeFinder({
+    company_linkedin_url: "https://linkedin.com/company/figma",
   });
   console.log("Employees:", result);
 }
 
-// ── Wallet Balance ──────────────────────────────────────────────────────
 
 async function checkBalance() {
-  const balance = await client.wallets.getBalance();
+  const balance = await client.wallets.getWalletBalance();
   console.log("Balance:", balance);
 }
 
-// ── Error Handling ──────────────────────────────────────────────────────
 
 async function errorHandlingExample() {
   try {
@@ -92,11 +83,8 @@ async function errorHandlingExample() {
   }
 }
 
-// ── Run ─────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log("--- Enrich API SDK Examples ---\n");
-
   await checkBalance();
   await findEmail();
   await validateEmail();
