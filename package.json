@@ -1,6 +1,6 @@
 {
   "name": "@enrich.so/sdk",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "TypeScript SDK for the Enrich API - email finder, phone finder, lead finder, email validation, and more.",
   "type": "module",
   "main": "./dist/index.js",

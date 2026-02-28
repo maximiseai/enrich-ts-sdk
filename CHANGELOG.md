@@ -1,3 +1,10 @@
+# 1.0.0 (2026-02-28)
+
+
+### Bug Fixes
+
+* correct method names and parameters ([737c8fd](https://github.com/maximiseai/enrich-ts-sdk/commit/737c8fd5b3fbf8b5b5dbdf8d95ab1b8640b523b6))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
