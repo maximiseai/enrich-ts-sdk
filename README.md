@@ -1,17 +1,17 @@
 # Enrich API TypeScript SDK
 
-The official TypeScript SDK for the [Enrich API](https://enrich.so) — find emails, phone numbers, validate emails, discover leads, and more.
+The official TypeScript SDK for the [Enrich API](https://enrich.so) - find emails, phone numbers, validate emails, discover leads, and more.
 
 ## Installation
 
 ```bash
-npm install enrich-ts-sdk
+npm install @enrich.so/sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { EnrichApiClient } from "enrich-ts-sdk";
+import { EnrichApiClient } from "@enrich.so/sdk";
 
 const client = new EnrichApiClient({
   apiKey: "YOUR_API_KEY",
@@ -29,7 +29,7 @@ console.log(result);
 
 ## Authentication
 
-All API requests require an API key passed via the `x-api-key` header. The SDK handles this automatically — just provide your key when creating the client:
+All API requests require an API key passed via the `x-api-key` header. The SDK handles this automatically - just provide your key when creating the client:
 
 ```typescript
 const client = new EnrichApiClient({
@@ -474,7 +474,7 @@ import {
   EnrichApiError,
   EnrichApiTimeoutError,
   EnrichApi,
-} from "enrich-ts-sdk";
+} from "@enrich.so/sdk";
 
 try {
   const result = await client.emailFinder.findEmail({
@@ -484,19 +484,19 @@ try {
   });
 } catch (error) {
   if (error instanceof EnrichApi.BadRequestError) {
-    // 400 — invalid request parameters
+    // 400 - invalid request parameters
     console.error("Bad request:", error.body);
   } else if (error instanceof EnrichApi.UnauthorizedError) {
-    // 401 — invalid or missing API key
+    // 401 - invalid or missing API key
     console.error("Unauthorized:", error.body);
   } else if (error instanceof EnrichApi.PaymentRequiredError) {
-    // 402 — insufficient credits
+    // 402 - insufficient credits
     console.error("Insufficient credits:", error.body);
   } else if (error instanceof EnrichApi.TooManyRequestsError) {
-    // 429 — rate limit exceeded
+    // 429 - rate limit exceeded
     console.error("Rate limited:", error.body);
   } else if (error instanceof EnrichApi.InternalServerError) {
-    // 500 — server error
+    // 500 - server error
     console.error("Server error:", error.body);
   } else if (error instanceof EnrichApiTimeoutError) {
     // Request timed out
