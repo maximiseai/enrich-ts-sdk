@@ -1,0 +1,15 @@
+# Source files (compiled output in dist/ is published)
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Development
+node_modules/
+examples/
+.github/
+
+# Misc
+.gitignore
+.DS_Store
+*.log
+CHANGELOG.md

@@ -1,0 +1,65 @@
+{
+  "name": "enrich-ts-sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for the Enrich API — email finder, phone finder, lead finder, email validation, and more.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "import": "./dist/api/index.js",
+      "default": "./dist/api/index.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js",
+      "default": "./dist/core/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\"",
+    "prepack": "npm run build",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "enrich",
+    "api",
+    "sdk",
+    "email-finder",
+    "phone-finder",
+    "lead-finder",
+    "email-validation",
+    "reverse-email-lookup",
+    "data-enrichment",
+    "b2b",
+    "leads"
+  ],
+  "author": "Enrich <support@enrich.so> (https://enrich.so)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maximiseai/enrich-ts-sdk.git"
+  },
+  "homepage": "https://github.com/maximiseai/enrich-ts-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/maximiseai/enrich-ts-sdk/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.2",
+    "typescript": "~5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false
+}
