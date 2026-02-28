@@ -49,7 +49,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/maximiseai/enrich-ts-sdk.git"
+    "url": "git+https://github.com/maximiseai/enrich-ts-sdk.git"
   },
   "homepage": "https://github.com/maximiseai/enrich-ts-sdk#readme",
   "bugs": {
