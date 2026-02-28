@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/maximiseai/enrich-ts-sdk/compare/v1.0.0...v1.0.1) (2026-02-28)
+
+
+### Bug Fixes
+
+* normalize repository url ([3c32e63](https://github.com/maximiseai/enrich-ts-sdk/commit/3c32e63789a28903761ef7b062433e48336e7c47))
+
 # 1.0.0 (2026-02-28)
 
 
