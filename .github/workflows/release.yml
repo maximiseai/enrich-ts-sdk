@@ -8,7 +8,6 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
-  packages: write
 
 jobs:
   release:
@@ -41,10 +40,3 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
 
-      - name: Publish to GitHub Packages
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
-          echo "@enrich.so:registry=https://npm.pkg.github.com" >> .npmrc
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
